@@ -1,0 +1,180 @@
+function Nova_Aba () {
+var Planilha = SpreadsheetApp.openById('1KMWy2rtO8l-CuPugefAovJ56A0crG_MHWzZfBJ-0E-Q');
+var aba_alvo = Planilha.getSheetByName('Modelo MGM');
+var novaAba, idNovaAba;
+var novo_nome = Browser.inputBox('Atenção','Informe o novo nome',Browser.Buttons.OK)
+
+novaAba = aba_alvo.copyTo(Planilha);
+novaAba.setName(novo_nome);
+idNovaAba = novaAba.getSheetId();
+}
+
+function Buscar () {
+
+var Planilha = SpreadsheetApp.openById('1KMWy2rtO8l-CuPugefAovJ56A0crG_MHWzZfBJ-0E-Q');
+var aba_pesquisa = Planilha.getSheetByName('Menu');
+var aba_base = Planilha.getSheetByName('Base de dados da mgm');
+var valor_buscado = aba_pesquisa.getRange('D4').getValue();
+var last_row_busca = aba_base.getLastRow();
+var contador = 0;
+
+for (var i = 5;i <= (last_row_busca); i++){
+
+var celula = aba_base.getRange("B"+i);
+var resultado = celula.getValue();
+
+if (valor_buscado == resultado) {
+
+n_obra_base = aba_base.getRange('B'+i).getValue();
+n_obra_resultado = aba_pesquisa.getRange('B9').setValue(n_obra_base);
+
+local_obra_base = aba_base.getRange('C'+i).getValue();
+local_obra_resultado = aba_pesquisa.getRange('D9').setValue(local_obra_base);
+
+demissao_obra_base = aba_base.getRange('D'+i).getValue();
+demissao_obra_resultado = aba_pesquisa.getRange('F9').setValue(demissao_obra_base);
+
+etapa_obra_base = aba_base.getRange('E'+i).getValue();
+etapa_obra_resultado = aba_pesquisa.getRange('H9').setValue(etapa_obra_base);
+
+ultimasaida_obra_base = aba_base.getRange('F'+i).getValue();
+ultimasaida_obra_resultado = aba_pesquisa.getRange('J9').setValue(ultimasaida_obra_base);
+
+}
+
+else {
+
+contador = contador+1;
+
+}
+}
+
+if ((contador+4) == last_row_busca){
+
+if(Browser.msgBox("Obra não existente na base!!!", "Deseja adicionar esta obra na base de dados?", Browser.Buttons.YES_NO)=='yes'){
+
+var Planilha = SpreadsheetApp.openById('1KMWy2rtO8l-CuPugefAovJ56A0crG_MHWzZfBJ-0E-Q');
+var aba_base = Planilha.getSheetByName('Base de dados da mgm');
+var last_row_busca = aba_base.getLastRow();
+var aba_alvo = Planilha.getSheetByName('Modelo MGM');
+var novaAba, idNovaAba;
+
+l = Browser.inputBox("Local da Obra", "Qual o local da obra?", Browser.Buttons.OK);
+d = Browser.inputBox("Data de Emissão", "Qual a data de emissão da obra?", Browser.Buttons.OK);
+e = Browser.inputBox("Etapa", "Qual o número de etapa da obra?", Browser.Buttons.OK);
+s = Browser.inputBox("Última Saída", "Qual a da data da ultima saída?", Browser.Buttons.OK);
+
+n_obra = aba_base.getRange('B'+(last_row_busca+1)).setValue(valor_buscado);
+l_obra = aba_base.getRange('C'+(last_row_busca+1)).setValue(l);
+d_obra = aba_base.getRange('D'+(last_row_busca+1)).setValue(d);
+e_obra = aba_base.getRange('E'+(last_row_busca+1)).setValue(e);
+s_obra = aba_base.getRange('F'+(last_row_busca+1)).setValue(s);
+
+novaAba = aba_alvo.copyTo(Planilha);
+novaAba.setName(valor_buscado);
+idNovaAba = novaAba.getSheetId();
+
+var aba_nova_aba = Planilha.getSheetByName(valor_buscado)
+
+a = "Saída\n"+s
+
+n_obra_mgm = aba_nova_aba.getRange('H4').setValue(valor_buscado);
+local_obra_mgm = aba_nova_aba.getRange('C6').setValue(l);
+data_obra_mgm = aba_nova_aba.getRange('D4').setValue(d);
+etapa_obra_mgm = aba_nova_aba.getRange('J8').setValue(e);
+saida_obra_mgm = aba_nova_aba.getRange('F21').setValue(a);
+}
+}
+}
+
+function Cadastrar () {
+
+var Planilha = SpreadsheetApp.openById('1KMWy2rtO8l-CuPugefAovJ56A0crG_MHWzZfBJ-0E-Q');
+var aba_pesquisa = Planilha.getSheetByName('Menu');
+var aba_base = Planilha.getSheetByName('Base de dados da mgm');
+var valor_buscado = aba_pesquisa.getRange('D4').getValue();
+var last_row_busca = aba_base.getLastRow();
+var aba_alvo = Planilha.getSheetByName('Modelo MGM');
+var novaAba, idNovaAba
+
+if(n = Browser.msgBox("ATENÇÃO!!!", "Deseja cadastrar alteração nesta Obra?", Browser.Buttons.YES_NO)=="yes"){
+
+if(valor_buscado==""){
+
+if(n = Browser.msgBox("ATENÇÃO!!!", "Deseja Cadastrar uma Obra sem antes tentar Busca-la na Base de Dados? Pois pode causar problemas futuros", Browser.Buttons.YES_NO)=="yes"){
+
+n = Browser.inputBox("Número da Obra", "Qual o número da obra?", Browser.Buttons.OK);
+l = Browser.inputBox("Local da Obra", "Qual o local da obra?", Browser.Buttons.OK);
+d = Browser.inputBox("Data de Emissão", "Qual a data de emissão da obra?", Browser.Buttons.OK);
+e = Browser.inputBox("Etapa", "Qual o número de etapa da obra?", Browser.Buttons.OK);
+s = Browser.inputBox("Última Saída", "Qual a da data da ultima saída?", Browser.Buttons.OK);
+
+n_obra = aba_base.getRange('B'+(last_row_busca+1)).setValue(n);
+l_obra = aba_base.getRange('C'+(last_row_busca+1)).setValue(l);
+d_obra = aba_base.getRange('D'+(last_row_busca+1)).setValue(d);
+e_obra = aba_base.getRange('E'+(last_row_busca+1)).setValue(e);
+s_obra = aba_base.getRange('F'+(last_row_busca+1)).setValue(s);
+
+novaAba = aba_alvo.copyTo(Planilha);
+novaAba.setName(valor_buscado);
+idNovaAba = novaAba.getSheetId();
+
+var aba_nova_aba = Planilha.getSheetByName(valor_buscado)
+
+a = "Saída\n"+s
+
+n_obra_mgm = aba_nova_aba.getRange('H4').setValue(valor_buscado);
+local_obra_mgm = aba_nova_aba.getRange('C6').setValue(l);
+data_obra_mgm = aba_nova_aba.getRange('D4').setValue(d);
+etapa_obra_mgm = aba_nova_aba.getRange('J8').setValue(e);
+saida_obra_mgm = aba_nova_aba.getRange('F21').setValue(a);
+}
+}
+else{
+for (var i = 5;i <= (last_row_busca); i++){
+
+var celula = aba_base.getRange("B"+i);
+var resultado = celula.getValue();
+
+if (valor_buscado == resultado) {
+
+e = Browser.inputBox("Etapa", "Qual o número de etapa da obra?", Browser.Buttons.OK);
+s = Browser.inputBox("Última Saída", "Qual a da data da ultima saída?", Browser.Buttons.OK);
+
+e_obra = aba_base.getRange('E'+i).setValue(e);
+s_obra = aba_base.getRange('F'+i).setValue(s);
+}
+}
+}
+}
+}
+function Limpar () {
+
+var Planilha = SpreadsheetApp.openById('1KMWy2rtO8l-CuPugefAovJ56A0crG_MHWzZfBJ-0E-Q');
+var aba_pesquisa = Planilha.getSheetByName('Menu');
+
+busca = aba_pesquisa.getRange('D4').setValue("");
+n_obra_resultado = aba_pesquisa.getRange('B9').setValue("");
+local_obra_resultado = aba_pesquisa.getRange('D9').setValue("");
+demissao_obra_resultado = aba_pesquisa.getRange('F9').setValue("");
+etapa_obra_resultado = aba_pesquisa.getRange('H9').setValue("");
+ultimasaida_obra_resultado = aba_pesquisa.getRange('J9').setValue("");
+}
+
+function Buscaraba (){
+
+var Planilha = SpreadsheetApp.getActiveSpreadsheet();
+var aba_pesquisa = Planilha.getSheetByName('Menu');
+var valor_buscado = aba_pesquisa.getRange('D4').getValue().toString();
+var aba_buscada = Planilha.getSheetByName(valor_buscado);
+//var n_abas = Planilha.getNumSheets();
+var abas = Planilha.getSheets().map(function(i) { return i.getName()  });
+
+for(var i in abas) {
+    if (valor_buscado.match(abas[i])){
+
+      SpreadsheetApp.setActiveSheet(aba_buscada);
+
+    }
+  }
+}
